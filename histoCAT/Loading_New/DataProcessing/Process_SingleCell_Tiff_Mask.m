@@ -83,6 +83,7 @@ for k=1:size(masks,2)
             chandat = tiff_matrix{k};
             
             %Prepare to get the mean intensities of all channels
+            addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/antiquated_functions/")
             get_mean = @(chan) struct2array(regionprops(Current_Mask, chandat{chan}, 'MeanIntensity'))';
             mean_tab = cell2mat(arrayfun(get_mean,1:length(chandat), 'UniformOutput',0));
             

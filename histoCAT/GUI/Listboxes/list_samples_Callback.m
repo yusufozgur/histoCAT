@@ -1,4 +1,4 @@
-function list_samples_Callback(hObject, eventdata, handles)
+function list_samples_Callbackapp(app)%(hObject, eventdata, handles)
 % LIST_SAMPLES_CALLBACK: Executes on selection change in list_samples.
 %
 % hObject: handle to lstGates (see GCBO)
@@ -18,7 +18,7 @@ gates = retr('gates');
 allids = retr('allids');
 global HashID;
 global Sample_Set_arranged;
-selected_gates = get(handles.list_samples,'Value');
+selected_gates = app.list_samples.Value;
 
 %If there are no gates in session, return
 if (size(gates, 1) == 0)

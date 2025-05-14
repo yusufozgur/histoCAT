@@ -45,6 +45,7 @@ find_dir = find(cellfun(@isdir,samplefolders));
 fcsfiles_path(find_dir) = {['']};
 
 %Store HashIDs as unique identifiers like imageids
+addpath("histoCAT/3rdParty/bh_tsne/")
 fullHash = cellfun(@DataHash,samplefolders,'UniformOutput',false);
 
 %If HashID not already present add new, else concatenate to existing

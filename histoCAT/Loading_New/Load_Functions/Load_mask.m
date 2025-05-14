@@ -28,6 +28,7 @@ if cellfun(@isempty,Sample_Set_arranged(i)) == 0
     %Check if mask exists in sample folder
     
     %Get all the files in the sample folder
+    addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/3rdParty/")
     fileList = getAllFiles(char(Sample_Set_arranged(i)));
     
     %Check if matfile exist

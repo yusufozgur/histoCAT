@@ -1,4 +1,4 @@
-function Master_LoadSamples( hObject, eventdata, handles )
+function Master_LoadSamples(app) %hObject, eventdata, handles )
 % MASTER_LOADSAMPLES: Main function for general loading. Calls all other
 % necessary loading functions.
 %
@@ -23,6 +23,7 @@ global Fcs_Interest_all
 global HashID
 
 %Function call to store the sample folder
+addpath("histoCAT/Loading_New/Load_Functions/")
 [ samplefolders,fcsfiles_path,HashID] = Load_SampleFolders(HashID);
 
 %If no samples are found return
@@ -32,6 +33,7 @@ if isempty(samplefolders) == 1
 end
 
 %Retrieve the status of first time loading 0 or 1
+addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/3rdParty/cyt_functions_unchanged")
 loadflag = retr('loadflag');
 
 %Start timing
@@ -43,10 +45,12 @@ tic
 
 %If the spot detection plug-in folder exists, call spot detection
 if exist('SpotDetection','dir')
+    addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/SpotDetection/")
     [Tiff_all,Tiff_name] = spot_detection_master(Tiff_name,Tiff_all);
 end
 
 %Function call to get the single cell info into matrix
+addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/Loading_New/DataProcessing/")
 [Fcs_Interest_all] = DataProcessing_Master(Mask_all,Tiff_all,Tiff_name,HashID,Fcs_Interest_all);
 
 
@@ -58,6 +62,7 @@ toc
 store_sessionData(samplefolders,fcsfiles_path,Sample_Set_arranged,Fcs_Interest_all,HashID,Mask_all );
 
 %Retrieve gates
+addpath("histoCAT/3rdParty/cyt_functions_unchanged/")
 gates = retr('gates');
 if isempty(gates) == 1
     return;
@@ -68,17 +73,25 @@ end
 put('names_add',names_add);
 
 %Update GUI handles.
-set(handles.list_samples,'String',names_add);
-set(handles.list_samples,'Max',1000,'Min',1);
-set(handles.list_channels,'Value',1);
-set(handles.list_samples,'Value',1);
-set(handles.list_channels,'Max',1000,'Min',2);
+app.list_samples.Items = cat(2,app.list_samples.Items,names_add');
+%set(app.list_samples,'Max',1000,'Min',1);
+%set(app.list_channels,'Max',1000,'Min',2);
+% TODO: Limit max selection and min selection
+
+%if there are samples, we should pre-select the second item in listbox,
+%   which is the first sample
+if ~isempty(names_add)
+    app.list_samples.Value = app.list_samples.Items{2};
+end
+
+%app.list_channels.Value = app.list_channels.Items{2};
+
 
 %Enable the main buttons
-set(handles.analyze_button,'Enable','on');
-set(handles.visualize_button,'Enable','on');
-set(handles.preparesample_button,'Enable','on');
-set(handles.remove_options,'Enable','on');
+set(app.analyze_button,'Enable','on');
+set(app.visualize_button,'Enable','on');
+set(app.preparesample_button,'Enable','on');
+set(app.remove_options,'Enable','on');
 
 
 %Create a custom folder to store all gated files
@@ -108,7 +121,8 @@ if loadflag == 1
 end
 
 %Call function to update list boxes and store sample and channels data.
-list_samples_Callback;
+addpath("/home/yusuf/Hiwi/histoCAT/histoCAT/GUI/Listboxes/")
+list_samples_Callback(app);
 
 %Get the GUI handles and set the pixelexpansion to the value the user
 %previously defined
