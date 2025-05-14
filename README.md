@@ -28,7 +28,6 @@ For further details please read the corresponding manual available at <https://g
 
 Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
 
-
 ### Dependencies
 - uipickfiles
 - Image Processing Toolbox
